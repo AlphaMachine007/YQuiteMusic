@@ -14,5 +14,5 @@
 
 ## 后端文件地址
 
-- [后端服务器](https://code.visualstudio.com/)
-- [数据源-网易云音乐API](https://github.com/AlphaMachine007/YQuietMusicBackEnd)
+- [后端服务器](https://github.com/AlphaMachine007/YQuietMusicBackEnd)
+- [数据源-网易云音乐API](https://github.com/Binaryify/NeteaseCloudMusicApi)

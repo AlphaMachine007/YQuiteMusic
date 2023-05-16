@@ -1,4 +1,4 @@
-[![Typing SVG](https://readme-typing-svg.demolab.com/?lines=First+line+of+text;Second+line+of+text)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com/?lines=YQuietMusic;Being a quiet player)](https://git.io/typing-svg)
 
 **项目介绍**：本项目为基于Vue、NodeJS以及网易云音乐API的在线音乐平台，实现前后端分离，用户可在线播放音乐、创建歌单、查找歌曲歌单，在个人中心可以修改自身资料、与其他用户进行交流，同时可以登录网易云音乐账号将歌单选择性导入，或通过云音乐歌单的Url将收藏的歌单进行导入。
 

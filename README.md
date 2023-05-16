@@ -1,6 +1,6 @@
 # Vue 3 + Vite
 
-**项目介绍**：本项目为基于Vue、NodeJS以及网易云音乐API的在线音乐平台，用户可在线播放音乐、创建歌单、查找歌曲歌单，在个人中心可以修改自身资料、与其他用户进行交流，同时可以登录网易云音乐账号将歌单选择性导入，或通过云音乐歌单的Url将收藏的歌单进行导入。
+**项目介绍**：本项目为基于Vue、NodeJS以及网易云音乐API的在线音乐平台，实现前后端分离，用户可在线播放音乐、创建歌单、查找歌曲歌单，在个人中心可以修改自身资料、与其他用户进行交流，同时可以登录网易云音乐账号将歌单选择性导入，或通过云音乐歌单的Url将收藏的歌单进行导入。
 
 **技术栈**：Vue3+vite+axios+pinia+mongoDB+elementPlus+Echarts
 
@@ -14,4 +14,5 @@
 
 ## 后端文件地址
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- [后端服务器](https://code.visualstudio.com/)
+- [数据源-网易云音乐API](https://github.com/AlphaMachine007/YQuietMusicBackEnd)

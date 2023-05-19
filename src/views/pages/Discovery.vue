@@ -22,9 +22,6 @@ const mainContent = useMainContent();
 onMounted(() => {
     mainContent.getAllTopList();
 })
-function gotoSongSheet(row){
-    console.log(row);
-}
 </script>
 
 <style lang="less" scoped>

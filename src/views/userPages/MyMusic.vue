@@ -66,8 +66,7 @@
                 }" :props="{
             key: '_id',
             label: 'sheetName'
-        }"
-        @change="checkedItem">
+        }">
             <template #default="{ option }">
                 <div class="transfer-item">
                     <img :src="option.sheetContent.length ? option.sheetContent[option.sheetContent.length - 1].album.picUrl : '/src/assets/avatar.jpg'"
@@ -169,7 +168,6 @@ async function playingMusic(row) {
 }
 async function deleteFavoriteMusic(row) {
     const result = await api.user.reqDeleteMyFavorite(row.id);
-    console.log(result)
     if (result.state === 200) {
         ElMessage.success('删除成功');
         userStore.getMyFavorite()
@@ -185,13 +183,8 @@ onMounted(()=>{
 // 添加至其他本地歌单中
 function addToSongSheets() {
     isAddToOther.value = true
-
-}
-function checkedItem(nowValue,direction,moveArr){
-    console.log(nowValue,direction,moveArr)
 }
 async function submitAdd(){
-    console.log(addToArr.value)
     const result = await api.music.reqAddToOtherSheet(addToArr.value);
     if(result.state === 200){
         songSheetStore.getSongSheet();

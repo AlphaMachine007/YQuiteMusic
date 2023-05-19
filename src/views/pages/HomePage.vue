@@ -24,9 +24,6 @@ onMounted(() => {
     contentStore.getCommend()
 })
 
-function checkSongSheet(row){
-    console.log(row)
-}
 
 </script>
 

@@ -24,12 +24,10 @@ export const useCloudMusic = defineStore('cloudMusic',{
         },
         async getUnikey(){
             const result = await api.cloudMusic.reqGetUnikey();
-            console.log(result);
             return result;
         },
         async getQRCode(key){
             const result = await api.cloudMusic.reqGetQRCode({key});
-            console.log(result);
             return result;
         },
         async checkQRCode(key){

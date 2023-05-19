@@ -52,7 +52,6 @@ async function addToMyFavorite() {
     }
 }
 async function addToSongSheet(row){
-    console.log(row);
     const addData = {
         songSheetId:row._id,
         id: playListStore.preToAdd.id,

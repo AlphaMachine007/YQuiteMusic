@@ -99,7 +99,6 @@ function closeDialog() {
 }
 // 上传图片(并获取裁剪图片)
 function getCrop() {
-    // console.log(cropper.value)
     // 获取截图的base64数据
     // cropper.value.getCropData(data=>{
 

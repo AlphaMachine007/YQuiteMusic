@@ -26,7 +26,13 @@
                             </div>
                         </template>
                         <span v-show="!isModify">{{ userStore.user.account }}</span>
-                        <el-input v-show="isModify" v-model="userStore.user.account" maxlength="11"></el-input>
+                        <el-form :model="userStore.user" class="singer-form" ref="phoneForm" :rules="rules">
+                            <el-form-item prop="account">
+                                <el-input v-show="isModify" v-model="userStore.user.account" maxlength="11"></el-input>
+                            </el-form-item>
+                        </el-form>
+
+                        <!-- <el-input v-show="isModify" v-model="userStore.user.account" maxlength="11"></el-input> -->
                     </el-descriptions-item>
                     <el-descriptions-item class="form-box">
                         <template #label>
@@ -44,7 +50,7 @@
                             <el-option label="女" :value="0">
                             </el-option>
                         </el-select>
-                        
+
                     </el-descriptions-item>
                     <el-descriptions-item class="form-box">
                         <template #label>
@@ -57,13 +63,11 @@
                         </template>
                         <span v-show="!isModify">{{ userStore.user.status }}</span>
                         <el-select v-show="isModify" v-model="userStore.user.status" filterable>
-                            <el-option v-for="item in userStore.status"
-                                :key="item.value"
-                                :label="item.status"
+                            <el-option v-for="item in userStore.status" :key="item.value" :label="item.status"
                                 :value="item.status">
                             </el-option>
                         </el-select>
-                        
+
                     </el-descriptions-item>
                     <el-descriptions-item class="form-box">
                         <template #label>
@@ -75,11 +79,13 @@
                             </div>
                         </template>
                         <span v-show="!isModify">{{ userStore.user.description }}</span>
-                        <el-input v-show="isModify" type="textarea" v-model="userStore.user.description"></el-input>
+                        <el-input v-show="isModify" maxlength="100" type="textarea"
+                            v-model="userStore.user.description"></el-input>
                     </el-descriptions-item>
                 </el-descriptions>
                 <div class="btn-group">
-                    <el-button v-show="!isModify" type="danger" size="default" @click="isModify = true" class="modifyBtn">修改</el-button>
+                    <el-button v-show="!isModify" type="danger" size="default" @click="isModify = true"
+                        class="modifyBtn">修改</el-button>
                     <el-button v-show="isModify" size="default" @click="isModify = false">取消</el-button>
                     <el-button v-show="isModify" type="primary" size="default" @click="saveUserInfo">保存</el-button>
                 </div>
@@ -91,25 +97,38 @@
 
 <script setup>
 import { useUser } from '@/store/user';
-import { onMounted } from 'vue';
-import { User,Iphone,Location,Headset,ChatDotRound } from '@element-plus/icons-vue'
+import { onMounted, reactive } from 'vue';
+import { User, Iphone, Location, Headset, ChatDotRound } from '@element-plus/icons-vue'
 // 修改信息flag
-const isModify = ref(false)
-const userStore = useUser()
+const isModify = ref(false);
+const userStore = useUser();
 
-onMounted(()=>{
+const phoneForm = ref(null);
+
+const rules = reactive({
+    account: [
+        { required: true, message: '请输入手机号', trigger: 'blur' },
+        { pattern: /^[1][3,4,5,7,8,9][0-9]{9}$/, message: '手机号格式不正确', trigger: 'blur' }
+    ]
+});
+
+onMounted(() => {
     userStore.getStatus()
-})
+});
 
-async function saveUserInfo(){
-    let result = await userStore.updateUserInfo(userStore.user)
-    if(result.state === 200){
-        ElMessage.success('修改成功')
-    }else{
-        ElMessage.error('修改失败，请稍后再试')
-    }
-    isModify.value = false
-}
+function saveUserInfo() {
+    phoneForm.value.validate().then(async valid => {
+        if (valid) {
+            let result = await userStore.updateUserInfo(userStore.user);
+            if (result.state === 200) {
+                ElMessage.success('修改成功');
+            } else {
+                ElMessage.error('修改失败，请稍后再试');
+            }
+            isModify.value = false;
+        }
+    })
+};
 </script>
 
 <style lang="less" scoped>
@@ -127,29 +146,41 @@ async function saveUserInfo(){
         background-color: white;
         width: 80%;
 
-        .info-card{
+        .info-card {
             .info-table {
                 width: 100%;
                 // .cell-item {
                 //     display: flex;
                 //     align-items: center;
                 // }
-    
+
                 .form-box {
                     overflow: hidden;
                     text-overflow: ellipsis;
+
+                    .cell-item {
+                        min-width: 110px;
+                    }
                 }
             }
-            .btn-group{
+
+            .btn-group {
                 width: 100%;
                 display: flex;
                 justify-content: center;
 
-                .modifyBtn{
+                .modifyBtn {
                     width: 10%;
                 }
             }
         }
+    }
+}
+</style>
+<style lang="less">
+.singer-form {
+    .el-form-item {
+        margin-bottom: 0 !important;
     }
 }
 </style>

@@ -8,7 +8,6 @@ const userStore = useUser();
 const songSheetStore = useSongSheet();
 
 async function toSongSheetDetail(row) {
-    console.log(row)
     const sendCollectSheet = {
         userId: userStore.user._id,
         _id:row.id,

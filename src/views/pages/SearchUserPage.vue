@@ -161,7 +161,6 @@ async function chatWithTheUser() {
         }
     }
     const result = await chatStore.addChat(chatInfo);
-    console.log(result);
     router.push({path:'/home/chatroom'})
 }
 

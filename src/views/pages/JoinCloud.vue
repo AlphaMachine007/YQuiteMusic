@@ -104,7 +104,6 @@ async function Login() {
                 localStorage.setItem('YQ_CLOUD_STATUS', true);
                 localStorage.setItem('cookie', statusRes.cookie);
                 const playListRes = cloudMusicStore.getCloudPlayList(cloudMusicStore.cloudUser.account.id);
-                console.log(playListRes);
                 ElMessageBox.confirm('检测到云账户中歌单，是否导入', '导入歌单', {
                     confirmButtonText: '导入',
                     cancelButtonText: '取消',
@@ -121,7 +120,6 @@ async function Login() {
 async function cloudLogout() {
     const cookie = localStorage.getItem('cookie');
     const result = await cloudMusicStore.cloudLogout(cookie);
-    console.log(result)
     if (result.code == 200) {
         cloudMusicStore.cloudUser.isLogin = false;
         localStorage.setItem('YQ_CLOUD_STATUS', false);
@@ -188,7 +186,6 @@ async function collectToSheet(id) {
         })
     }
     const result = await collectSheetStore.collectFromSheet(sendCollectSheet);
-    console.log(result);
     return result;
 }
 </script>

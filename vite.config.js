@@ -8,7 +8,7 @@ import Components from 'unplugin-vue-components/vite';
 import { resolve } from "path";
 import VueSetupExtend from 'vite-plugin-vue-setup-extend'
 //element
-import { ElementPlusResolver,AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
+import { ElementPlusResolver, AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 
 
 // https://vitejs.dev/config/
@@ -20,17 +20,17 @@ export default defineConfig({
       //安装两行后你会发现在组件中不用再导入ref，reactive等
       imports: ['vue', 'vue-router'],
       //element
-      resolvers: [ElementPlusResolver(),AntDesignVueResolver()],
+      resolvers: [ElementPlusResolver(), AntDesignVueResolver()],
     }),
     Components({
       // 引入组件的,包括自定义组件
-      resolvers: [ElementPlusResolver(),AntDesignVueResolver({importStyle: true, resolveIcons: true})],
+      resolvers: [ElementPlusResolver(), AntDesignVueResolver({ importStyle: true, resolveIcons: true })],
     }),
   ],
   // 解析配置
-  resolve:{
-    alias:{
-      "@":resolve(__dirname,"./src")
+  resolve: {
+    alias: {
+      "@": resolve(__dirname, "./src")
     }
   },
 
@@ -48,5 +48,38 @@ export default defineConfig({
     //     rewrite: (path) => path.replace(/^\/api/, '')
     //   }
     // }
+  },
+  build: {
+    sourcemap: false,
+    minify: 'terser',
+    chunkSizeWarningLimit: 1500,
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return id
+              .toString()
+              .split('node_modules/')[1]
+              .split('/')[0]
+              .toString();
+          }
+        },
+        chunkFileNames: (chunkInfo) => {
+          const facadeModuleId = chunkInfo.facadeModuleId
+            ? chunkInfo.facadeModuleId.split('/')
+            : [];
+          const fileName =
+            facadeModuleId[facadeModuleId.length - 2] || '[name]';
+          return `js/${fileName}/[name].[hash].js`;
+        }
+      }
+    }
   }
 })
+

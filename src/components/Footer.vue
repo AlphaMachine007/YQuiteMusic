@@ -195,13 +195,11 @@ function changeMusicState() {
 };
 // 收藏歌曲
 function collectMusic(row) {
-    console.log(row);
     showCollect.value = true;
     playListStore.preToAdd = row;
 };
 // 下载歌曲
 async function downloadMusic(row) {
-    console.log(row)
     const result = await api.music.reqMusicUrl({ musicId: row.id, level: 'lossless' });
     if (result.code == 200) {
         const mp3Url = result.data[0].url

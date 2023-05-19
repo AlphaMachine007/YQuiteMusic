@@ -174,7 +174,6 @@ async function playAll(){
             time:elem.dt
         }
     })
-    console.log(sendArr);
     const result = await playListStore.playAllMusic(sendArr);
     if (result.state === 200) {
         await playListStore.getPlayList();
@@ -193,26 +192,31 @@ function changeTab(index) {
         activeTab.value = '1';
         localStorage.setItem('YQ_SEACHKINDS', 1);
         search.searchInfo()
+        search.searchKind = 0;
     } else if (index == 100) {
         search.changeType(100);
         activeTab.value = '100';
         localStorage.setItem('YQ_SEACHKINDS', 100);
-        search.searchInfo()
+        search.searchInfo();
+        search.searchKind = 0;
     } else if (index == 1000) {
         search.changeType(1000);
         activeTab.value = '1000';
         localStorage.setItem('YQ_SEACHKINDS', 1000);
-        search.searchInfo()
+        search.searchInfo();
+        search.searchKind = 0;
     } else if (index == 10) {
         search.changeType(10);
         activeTab.value = '10';
         localStorage.setItem('YQ_SEACHKINDS', 10);
-        search.searchInfo()
+        search.searchInfo();
+        search.searchKind = 0;
     } else {
         search.changeType(517);
         activeTab.value = '517'
         localStorage.setItem('YQ_SEACHKINDS', 517);
         search.searchUser();
+        search.searchKind = 1;
     }
 }
 
@@ -351,10 +355,8 @@ function toSearchUser(row) {
 }
 async function gotoAlbum(row) {
     const result = await albumStore.getAlbumById(row.id);
-    console.log(result)
     if (result.code == 200) {
         result.isAlbum = true;
-        console.log(result);
         checkSheetContent(result);
     }
 }
@@ -370,7 +372,6 @@ watch(() => search.searchArr, (newValue) => {
 });
 
 watch(() => search.type, (newValue, oldValue) => {
-    console.log(newValue, oldValue)
     activeTab.value = newValue + '';
 })
 

@@ -42,8 +42,8 @@ const isLoading = ref(true);
 
 
 onMounted(() => {
-    getList();
     isLoading.value = true;
+    getList();
 })
 
 let focusList = ref([]);
@@ -51,10 +51,10 @@ let focusList = ref([]);
 async function getList() {
     await userStore.getFocusList();
     focusList.value = userStore.focusList;
+    isLoading.value = false;
 }
 
 async function gotoChat(row) {
-    console.log(row)
     const chatInfo = {
         userA: {
             id: userStore.user._id,
@@ -73,7 +73,6 @@ async function gotoChat(row) {
 
 watch(() => focusList.value, async (newValue, oldValue) => {
     if (JSON.stringify(newValue) != JSON.stringify(oldValue)) {
-        console.log(newValue, oldValue)
         await userStore.getFocusList();
         focusList.value = newValue;
         isLoading.value = false;

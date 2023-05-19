@@ -6,19 +6,19 @@
           <div class="charts" ref="charts" id="charts"></div>
         </el-col>
         <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" :span="12" class="panel-right">
-          <el-form ref="loginForm" :inline="false" :model="loginInfo">
+          <el-form ref="loginForm" :inline="false" :model="loginInfo" :rules="rules">
             <el-form-item>
               <h1 style="font-family: 'Bauhaus 93'">Welcome！乐享生活</h1>
             </el-form-item>
             <el-form-item>
-              <el-input v-model="loginInfo.account">
+              <el-input v-model.trim="loginInfo.account" prop="account" type="number" class="no-spin">
                 <template #prepend>
                   <el-button :icon="User" />
                 </template>
               </el-input>
             </el-form-item>
             <el-form-item label="">
-              <el-input v-model="loginInfo.password" type="password">
+              <el-input v-model.trim="loginInfo.password" type="password">
                 <template #prepend>
                   <el-button :icon="Key" />
                 </template>
@@ -36,12 +36,12 @@
   </div>
   <!-- 注册模态框 -->
   <el-dialog v-model="registDialog" title="注册账号" align-center>
-    <el-form :model="registInfo" label-position="right" label-width="70px" ref="registForm">
-      <el-form-item label="手机号">
-        <el-input v-model="registInfo.account" autocomplete="off" />
+    <el-form :model="registInfo" label-position="right" label-width="70px" :rules="rules" ref="registForm">
+      <el-form-item label="手机号" prop="account">
+        <el-input v-model.trim="registInfo.account" autocomplete="off" class="no-spin" />
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="registInfo.password" type="password" autocomplete="off" />
+        <el-input v-model.trim="registInfo.password" type="password" autocomplete="off" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -61,7 +61,7 @@ import { init } from 'echarts'
 import { User, Key } from '@element-plus/icons-vue'
 import { useUser } from '@/store/user'
 import router from '@/routes';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref,reactive } from 'vue';
 import { useRoute } from 'vue-router';
 
 let registDialog = ref(false)
@@ -74,6 +74,14 @@ let loginInfo = reactive({
 let registInfo = reactive({
   account: '',
   password: ''
+})
+
+// 表单验证
+const rules = reactive({
+  account: [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    { pattern: /^[1][3,4,5,7,8,9][0-9]{9}$/, message: '手机号格式不正确', trigger: 'blur' }
+  ]
 })
 
 onMounted(() => {
@@ -144,7 +152,7 @@ function initCharts() {
 }
 /* 用户登录 */
 function userLogin() {
-  loginForm.value.validate(async (valid) => {
+  loginForm.value.validate().then(async (valid) => {
     if (valid) {
       let result = await user.userLogin(loginInfo.account, loginInfo.password)
       if (result.state == 200) {
@@ -243,5 +251,13 @@ function userRegister() {
     background: url('../assets/mobileBack.png') no-repeat;
     background-size: cover;
   }
+}
+</style>
+
+<style>
+.no-spin input::-webkit-inner-spin-button,
+.no-spin input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>

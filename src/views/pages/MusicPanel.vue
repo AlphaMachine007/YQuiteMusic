@@ -8,10 +8,10 @@
             </div>
             <div class="banner-bottom">
                 <div class="banner-icon">
-                    <img v-show="isCollectMusic" src="@/assets/musicPanel/收藏 (1).svg" alt="collect"
+                    <img v-show="isCollectMusic" src="@/assets/musicPanel/collect.svg" alt="collect"
                         @click="removeFavorite" />
-                    <img v-show="!isCollectMusic" src="@/assets/musicPanel/收藏 (2).svg" alt="collect" @click="addFavorite" />
-                    <img src="@/assets/musicPanel/下载1 (1).svg" alt="download" @click="downloadMusic" />
+                    <img v-show="!isCollectMusic" src="@/assets/musicPanel/collect-filled.svg" alt="collect" @click="addFavorite" />
+                    <img src="@/assets/musicPanel/download.svg" alt="download" @click="downloadMusic" />
                     <img src="@/assets/musicPanel/分享.svg" alt="" class="sendToOther" @click="shareTheMusic" />
                 </div>
             </div>
@@ -124,18 +124,15 @@ async function downloadMusic() {
 // 分享音乐
 function shareTheMusic() {
     const baseUrl = window.location.origin+window.location.pathname;
-    console.log(baseUrl)
     const songId = playListStore.playingMusic.id;
     const shareUrl = `${baseUrl}?songId=${songId}`;
     navigator.clipboard.writeText(shareUrl);
-    console.log(shareUrl); 
     ElMessage.success('已将分享链接复制到剪切板中~');
 }
 async function getSongByUrl(){
     if(window.location.href.split('=')){
         const songId = window.location.href.split('=')[1];
         const result = await api.music.reqSongDetailById({songId});
-        console.log(result);
         if(result.code == 200){
             const music = {
                 album:result.songs[0].al,

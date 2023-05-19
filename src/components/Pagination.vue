@@ -13,11 +13,17 @@ const searchStore = useSearch()
 
 function changeSize(newSize) {
     searchStore.limit = newSize
-    searchStore.searchInfo()
+    if(searchStore.searchKind == 0)
+        searchStore.searchInfo()
+    else    
+        searchStore.searchUser()
 };
 function changeCurr(newCurr) {
     searchStore.current = newCurr
-    searchStore.searchInfo()
+    if(searchStore.searchKind == 0)
+        searchStore.searchInfo()
+    else    
+        searchStore.searchUser()
 };
 </script>
 

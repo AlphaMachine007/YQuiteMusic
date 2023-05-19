@@ -79,7 +79,6 @@ export const useUser = defineStore('user', {
         // 上传头像
         async updateAvatar(avatar) {
             const result = await api.user.reqUpdateAvatar(avatar);
-            console.log(result)
             if (result.state === 200) {
                 this.user.avatar = result.data.dataURL
             }

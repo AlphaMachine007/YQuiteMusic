@@ -15,7 +15,6 @@ export const useChat = defineStore('chat',{
         },
         async getChatList(){
             const result = await api.chat.reqGetChatList();
-            console.log(result)
             if(result.state === 200){
                 this.chatList = result.data;
             }

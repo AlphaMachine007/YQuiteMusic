@@ -91,7 +91,6 @@ onMounted(() => {
     })
     // 监听消息事件
     ws.addEventListener('message', async (event) => {
-        console.log('接收到消息', event.data);
         const message = JSON.parse(event.data);
         messages.value.push(message);
         await nextTick();
@@ -117,7 +116,6 @@ function chatWith(row) {
 }
 
 function deleteChart(chat){
-    console.log(chat.userA);
     const toClientName = userStore.user._id == chat.userA.id ? chat.userB.name : chat.userA.name;
     ElMessageBox.confirm(`确认删除与${toClientName}的会话吗`,'确认删除',{
         confirmButtonText:'确认',

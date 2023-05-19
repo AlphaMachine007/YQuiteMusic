@@ -130,7 +130,6 @@ function checkCollect() {
     }
 }
 async function playingMusic(row) {
-    console.log(row);
     const playList = {
         userId: userStore.user._id,
         playLists: {
@@ -151,7 +150,6 @@ async function playingMusic(row) {
         ElMessage.error('添加失败');
     }
     await playListStore.getPlayList();
-    console.log(playListStore.playList)
     const tempMusic = playListStore.playList.filter((elem) => {
         return elem.id == row.id
     });

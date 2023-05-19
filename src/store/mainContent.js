@@ -26,7 +26,6 @@ export const useMainContent = defineStore('mainContent',{
         },
         async getAllTopList(){
             const result = await api.mainContent.reqGetAllTopList();
-            console.log(result)
             if(result.code === 200){
                 this.topListProfile = result.list;
             }

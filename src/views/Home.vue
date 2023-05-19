@@ -184,18 +184,17 @@ function iconEvent() {
 }
 // 搜索
 async function gotoSearch() {
+    localStorage.setItem('YQ_SEACHKEYWORDS', search.keywords);
     if (JSON.parse(localStorage.getItem('YQ_SEACHKINDS')) == 517) {
         await search.searchUser();
     } else {
         router.push({ path: '/home/searchpage' });
-        localStorage.setItem('YQ_SEACHKEYWORDS', search.keywords);
         localStorage.setItem('YQ_SEACHKINDS', 1);
         await search.searchInfo();
     }
 }
 // 创建歌单
 async function createSongSheet() {
-    console.log(sheetName.value);
     const result = await api.music.reqCreateSongSheet({ sheetName: sheetName.value });
     if (result.state === 200) {
         ElMessage.success('歌单' + sheetName.value + '创建成功');

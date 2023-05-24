@@ -2,18 +2,18 @@
     <div class="foot-content">
         <div class="play-btn-group">
             <a class="play-btn" @click="preMusic">
-                <img src="../assets/上一首.svg" alt="pre">
+                <img src="@/assets/preMusic.svg" alt="pre">
             </a>
             <a class="play-btn play-btn-change" @click="changeMusicState">
-                <img src="../assets/音符.svg" alt="play" v-show="!playListStore.isPlaying">
-                <img class="playingBtn" src="../assets/play.gif" alt="pause" v-show="playListStore.isPlaying">
+                <img src="@/assets/note.svg" alt="play" v-show="!playListStore.isPlaying">
+                <img class="playingBtn" src="@/assets/play.gif" alt="pause" v-show="playListStore.isPlaying">
             </a>
             <a class="play-btn" @click="nextMusic">
-                <img src="../assets/下一首.svg" alt="next">
+                <img src="@/assets/nextMusic.svg" alt="next">
             </a>
         </div>
         <div class="music-player">
-            <img :src="playListStore.playingMusic && playListStore.playingMusic.album ? playListStore.playingMusic.album.picUrl : '/src/assets/logo.png'"
+            <img :src="playListStore.playingMusic && playListStore.playingMusic.album ? playListStore.playingMusic.album.picUrl : defaultLogo"
                 alt="title-page" class="title-page" @click="gotoMusicPanel">
             <div class="title-slider">
                 <div>
@@ -29,7 +29,7 @@
             ref="musicContainer"></audio>
         <div class="music-sound">
             <el-dropdown class="sound-box">
-                <img :src="sound <= 0 ? '/src/assets/静音.svg' : '/src/assets/音量.svg'" alt="sound" class="sound-btn">
+                <img :src="sound <= 0 ? mute : volumn" alt="sound" class="sound-btn">
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item>
@@ -41,7 +41,7 @@
             </el-dropdown>
             <el-dropdown trigger="click" placement="top" :hide-on-click="false">
                 <span class="el-dropdown-link">
-                    <img src="../assets/列表.svg" alt="musicLists" class="sound-btn">
+                    <img src="@/assets/list.svg" alt="musicLists" class="sound-btn">
                 </span>
                 <template #dropdown>
                     <el-dropdown-menu class="dropList">
@@ -119,6 +119,9 @@ import { usePlayList } from '@/store/playList';
 import api from '@/api';
 import CollectPanel from './CollectPanel.vue';
 import { ElMessage } from 'element-plus';
+import defaultLogo from '@/assets/logo.png';
+import mute from '@/assets/mute.svg';
+import volumn from '@/assets/volumn.svg';
 
 // 判断歌曲播放状态
 
@@ -279,7 +282,7 @@ function editLyric(lyric = playListStore.lyric) {
 }
 watch(() => playListStore.playingMusic, async (newValue) => {
     if (newValue) {
-        playListStore.getLyric();
+        await playListStore.getLyric();
         playListStore.lyricObj = editLyric(playListStore.lyric);
         await playListStore.getMusicInfo(newValue.id)
         if (playListStore.isPlaying === true) {
@@ -288,7 +291,7 @@ watch(() => playListStore.playingMusic, async (newValue) => {
             setTimeout(() => {
                 playListStore.isPlaying = true;
                 musicContainer.value.play();
-            }, 500)
+            }, 100)
         }
         localStorage.setItem('YQ_PLAYINGMUSIC', JSON.stringify(newValue));
         localStorage.setItem('YQ_PLAYINGMUSIC_INFO', JSON.stringify(playListStore.playingMusicInfo));
@@ -303,6 +306,7 @@ watch(() => playListStore.playList, (newValue) => {
 });
 watch(() => playListStore.playingMusicInfo, (newValue) => {
     if (newValue) {
+
         const minutes = Math.floor(newValue[0].time / 1000 / 60);
         const seconds = Math.floor(newValue[0].time % 60000 / 1000);
         let zeroM = '', zeroS = '';
@@ -316,7 +320,7 @@ watch(() => playListStore.playingMusicInfo, (newValue) => {
         // 音量
         sound.value = musicContainer.value.volume * 100;
         // 监听audio进度条
-        musicContainer.value.addEventListener('timeupdate', () => {
+        const handleTimeUpdate = () => {
             playListStore.currentTime = Math.floor(musicContainer.value.currentTime);
             const m = Math.floor(musicContainer.value.currentTime / 60);
             const s = Math.floor(musicContainer.value.currentTime % 60);
@@ -330,9 +334,13 @@ watch(() => playListStore.playingMusicInfo, (newValue) => {
             currentTime.value = zm + m + ':' + zs + s;
             process.value = (musicContainer.value.currentTime / musicContainer.value.duration) * 100
             if (musicContainer.value.currentTime === musicContainer.value.duration) {
+                musicContainer.value.removeEventListener('timeupdate', handleTimeUpdate);
                 nextMusic();
+                musicContainer.value.currentTime = 0;
             }
-        })
+        }
+
+        musicContainer.value.addEventListener('timeupdate', handleTimeUpdate);
     }
 })
 // 监听歌曲当前时间

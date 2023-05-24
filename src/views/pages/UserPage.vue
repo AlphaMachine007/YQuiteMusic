@@ -3,14 +3,14 @@
         <div class="user-header">
             <div class="user-avatar">
                 <div class="avatar-box" @click="modifyAvatar">
-                    <img :src="userStore.user.avatar ? userStore.user.avatar : '/src/assets/avatar.jpg'" alt="avatar" class="avatar-img">
+                    <img :src="userStore.user.avatar ? userStore.user.avatar : defaultAvatar" alt="avatar" class="avatar-img">
                     <img src="@/assets/camera.svg" alt="" class="mask-img">
                 </div>
                 <UploadAvatar :showAvatar="showAvatar" @closeDialog="closeDialog"></UploadAvatar>
                 
                 <span class="name-title">{{ userStore.user.name }}
-                    <img v-if="userStore.user.sex == 0" src="@/assets/女.svg" class="sex-icon">
-                    <img v-else src="@/assets/男.svg" class="sex-icon" alt="">
+                    <img v-if="userStore.user.sex == 0" src="@/assets/female.svg" class="sex-icon">
+                    <img v-else src="@/assets/male.svg" class="sex-icon" alt="">
                 </span>
                 <div class="pub-sub-info">
                     <div class="sub-info">
@@ -46,6 +46,7 @@ import router from '@/routes';
 import { useUser } from '@/store/user';
 import { ref } from 'vue';
 import UploadAvatar from '@/components/UploadAvatar.vue'
+import defaultAvatar from '@/assets/avatar.jpg';
 
 const userStore = useUser()
 let showAvatar = ref(false)

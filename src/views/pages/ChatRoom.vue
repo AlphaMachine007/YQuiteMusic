@@ -7,7 +7,7 @@
             </div>
             <div class="list-content">
                 <div class="list-item" v-for="chatItem in chatStore.chatList" @click="chatWith(chatItem)">
-                    <img :src="chatItem.userA.id == userStore.user._id ? (chatItem.userB.avatar ? chatItem.userB.avatar : '/src/assets/avatar.jpg') : (chatItem.userA.avatar ? chatItem.userA.avatar : '/src/assets/avatar.jpg')"
+                    <img :src="chatItem.userA.id == userStore.user._id ? (chatItem.userB.avatar.length > 30 ? chatItem.userB.avatar : defaultAvatar) : (chatItem.userA.avatar > 30 ? chatItem.userA.avatar : defaultAvatar)"
                         alt="">
                     <span>{{ chatItem.userA.id == userStore.user._id ? chatItem.userB.name : chatItem.userA.name }}</span>
                     <el-icon class="delete-icon" @click="deleteChart(chatItem)">
@@ -67,6 +67,7 @@ import { useChat } from '@/store/chat';
 import { Close } from '@element-plus/icons-vue';
 import api from '@/api';
 import { ElMessage } from 'element-plus';
+import defaultAvatar from '@/assets/avatar.jpg';
 const inputMessage = ref('');
 const messages = ref([]);
 const isConnect = ref(false);
@@ -82,7 +83,7 @@ const chatStore = useChat();
 onMounted(() => {
 
     // 创建WebSocket连接
-    ws = new WebSocket(`ws://localhost:8080?clientId=${userStore.user._id}`);
+    ws = new WebSocket(`ws://43.143.220.188:8081?clientId=${userStore.user._id}`);
 
     // 监听连接
     ws.addEventListener('open', () => {

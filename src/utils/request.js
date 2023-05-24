@@ -12,7 +12,7 @@ function needToken(config) {
 
 // 创建axios实例
 const request = axios.create({
-    baseURL: 'http://localhost:3001',// 所有的请求地址前缀部分(没有后端请求不用写)
+    baseURL: 'http://43.143.220.188:3001',// 所有的请求地址前缀部分(没有后端请求不用写)
     timeout: 80000, // 请求超时时间(毫秒)
     // withCredentials: true,// 异步请求携带cookie
     // headers: {

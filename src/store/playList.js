@@ -39,7 +39,7 @@ export const usePlayList = defineStore('playList',{
             const result = await api.music.reqMusicLyric({id:this.playingMusic.id});
             if(result.code === 200){
                 this.lyric = result.lrc.lyric;
-                this.translatelyric = result.tlyric.lyric || "";
+                this.translatelyric = result.tlyric ? result.tlyric.lyric || "" : "";
             }
         },
         // 播放全部功能

@@ -115,7 +115,7 @@
                         <el-empty v-if="search.keywords == ''" description="请输入搜索关键词"/>
                         <div v-else class="artistPanel" v-loading="search.loading">
                             <div class="artistBox" v-for="user in search.searchArr" @click="toSearchUser(user)">
-                                <img :src="user.avatar ? (user.avatar.length > 25 ? user.avatar : '/src/assets/avatar.jpg') : '/src/assets/avatar.jpg'"
+                                <img :src="user.avatar ? (user.avatar.length > 25 ? user.avatar : defaultAvatar) : defaultAvatar"
                                     alt="">
                                 <span>{{ user._doc ? user._doc.name : (user.name ? user.name : '') }}</span>
                             </div>
@@ -149,6 +149,7 @@ import transformTime from '@/utils/transformTime';
 import checkSheetContent from '@/utils/checkSheetContent';
 import api from '@/api';
 import router from '@/routes';
+import defaultAvatar from '@/assets/avatar.jpg';
 
 const search = useSearch();
 const userStore = useUser();

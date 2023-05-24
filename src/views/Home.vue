@@ -11,7 +11,7 @@
                                 class="searchInput" @keyup.enter.native="gotoSearch"></el-input>
                             <el-dropdown class="user-tag">
                                 <span class="el-dropdown-link">
-                                    <img :src="userStore.user.avatar ? userStore.user.avatar : '/src/assets/avatar.jpg'"
+                                    <img :src="userStore.user.avatar ? userStore.user.avatar : defaultAvatar"
                                         alt="" class="head-sculpture">
                                     <span style="flex-shrink:0 ">{{ userStore.user.name || '游客' }}</span>
                                     <el-icon class="el-icon--right">
@@ -109,11 +109,12 @@ import { usePlayList } from '@/store/playList';
 import { useSongSheet } from '@/store/songSheet';
 import { useCollectSheet } from '@/store/collectSheet';
 import { useCloudMusic } from '@/store/cloudMusic';
+import defaultAvatar from '@/assets/avatar.jpg';
 
 let isShowAddSheet = ref(false);
 let isShowImportPlayList = ref(false);
 let isCollapse = ref(false);
-let maxHeight = ref('600px');
+let maxHeight = ref('75vh');
 let drawer = ref(false);
 let windowWidth = ref(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth);
 let sheetName = ref('');
@@ -126,6 +127,8 @@ const playListStore = usePlayList();
 const songSheetStore = useSongSheet();
 const collectSheetStore = useCollectSheet();
 const cloudMusic = useCloudMusic();
+
+const avatarUrl = ref(userStore.user.avatar ? userStore.user.avatar : defaultAvatar);
 
 onMounted(() => {
     localStorage.removeItem('YQ_SEACHKINDS');

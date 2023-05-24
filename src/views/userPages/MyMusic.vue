@@ -69,7 +69,7 @@
         }">
             <template #default="{ option }">
                 <div class="transfer-item">
-                    <img :src="option.sheetContent.length ? option.sheetContent[option.sheetContent.length - 1].album.picUrl : '/src/assets/avatar.jpg'"
+                    <img :src="option.sheetContent.length ? option.sheetContent[option.sheetContent.length - 1].album.picUrl : '@/assets/avatar.jpg'"
                         alt="">
                     <span>{{ option.sheetName }}</span>
                 </div>

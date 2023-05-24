@@ -13,6 +13,8 @@ import { ElementPlusResolver, AntDesignVueResolver } from 'unplugin-vue-componen
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base:'./',
+  publicDir:'public',
   plugins: [
     vue(),
     VueSetupExtend(),
@@ -50,6 +52,7 @@ export default defineConfig({
     // }
   },
   build: {
+    assetsDir:'assets',
     sourcemap: false,
     minify: 'terser',
     chunkSizeWarningLimit: 1500,

@@ -2,7 +2,7 @@
     <div class="search-panel">
         <div class="base-info">
             <div class="info-left">
-                <img :src="searchUser.userInfo.avatar ? (searchUser.userInfo.avatar.length > 25 ? searchUser.userInfo.avatar : '/src/assets/avatar.jpg') : '/src/assets/avatar.jpg'"
+                <img :src="searchUser.userInfo.avatar ? (searchUser.userInfo.avatar.length > 25 ? searchUser.userInfo.avatar : defaultAvatar) : defaultAvatar"
                     alt="">
             </div>
             <div class="info-right">
@@ -67,7 +67,7 @@
                     v-if="collectSheetStore.searchCollectSheetInfo.length > 0"
                     v-for="songSheet in collectSheetStore.searchCollectSheetInfo">
                     <div class="bannerBox">
-                        <img :src="songSheet.sheetContent.length > 0 ? songSheet.sheetContent[songSheet.sheetContent.length - 1].album.picUrl : '/src/assets/back.jpg'"
+                        <img :src="songSheet.sheetContent.length > 0 ? songSheet.sheetContent[songSheet.sheetContent.length - 1].album.picUrl : defaultBack"
                             alt="" class="play-banner">
                         <img src="../../assets/play.svg" alt="" class="play-mask">
                     </div>
@@ -89,6 +89,8 @@ import { useCollectSheet } from '@/store/collectSheet';
 import { useUser } from '@/store/user';
 import { useChat } from '@/store/chat';
 import router from '@/routes';
+import defaultAvatar from '@/assets/avatar.jpg';
+import defaultBack from '@/assets/back.jpg';
 
 const searchUser = useSearchUser();
 const songSheetStore = useSongSheet();

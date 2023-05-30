@@ -102,51 +102,51 @@ let routes = [
                 }
             },
             {
-                path:'musicpanel',
+                path: 'musicpanel',
                 component: MusicPanel,
-                name:'MusicPanel',
-                meta:{
+                name: 'MusicPanel',
+                meta: {
                     title: '详情'
-                }
+                },
             },
             {
-                path:'songsheet',
-                component:SongSheet,
-                name:'SongSheet',
-                meta:{
+                path: 'songsheet',
+                component: SongSheet,
+                name: 'SongSheet',
+                meta: {
                     title: '歌单'
                 }
             },
             {
-                path:'joincloud',
-                component:JoinCloud,
-                name:'JoinCloud',
-                meta:{
-                    title:'登录云账号'
+                path: 'joincloud',
+                component: JoinCloud,
+                name: 'JoinCloud',
+                meta: {
+                    title: '登录云账号'
                 }
             },
             {
-                path:'discovery',
-                component:Discovery,
-                name:'Discovery',
-                meta:{
-                    title:'发现'
+                path: 'discovery',
+                component: Discovery,
+                name: 'Discovery',
+                meta: {
+                    title: '发现'
                 }
             },
             {
-                path:'searchuserpage',
-                component:SearchUserPage,
-                name:'SearchUserPage',
-                meta:{
-                    title:'用户'
+                path: 'searchuserpage',
+                component: SearchUserPage,
+                name: 'SearchUserPage',
+                meta: {
+                    title: '用户'
                 }
             },
             {
-                path:'chatroom',
-                component:ChatRoom,
-                name:'ChatRoom',
-                meta:{
-                    title:'私信'
+                path: 'chatroom',
+                component: ChatRoom,
+                name: 'ChatRoom',
+                meta: {
+                    title: '私信'
                 }
             }
         ]

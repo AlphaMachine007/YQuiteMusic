@@ -11,7 +11,7 @@
                         alt="">
                     <span>{{ chatItem.userA.id == userStore.user._id ? chatItem.userB.name : chatItem.userA.name }}</span>
                     <el-icon class="delete-icon" @click="deleteChart(chatItem)">
-                        <Close/>
+                        <Close />
                     </el-icon>
                 </div>
             </div>
@@ -29,13 +29,13 @@
                         <div v-show="message.isShowTime" class="time-bar">
                             <span>{{ new Date(message.time).toLocaleString() }}</span>
                         </div>
-                        <div :class="{ 'item-box-left': message.id != userStore.user._id, 'item-box-right': message.id == userStore.user._id }"
-                            >
+                        <div
+                            :class="{ 'item-box-left': message.id != userStore.user._id, 'item-box-right': message.id == userStore.user._id }">
                             <div
                                 :class="{ 'content-item-left': message.id != userStore.user._id, 'content-item-right': message.id == userStore.user._id }">
                                 <div
                                     :class="{ 'avatar-left': message.id != userStore.user._id, 'avatar-right': message.id == userStore.user._id }">
-                                    <img :src="chatStore.chatingInfo.userA.id == message.id ? chatStore.chatingInfo.userA.avatar : chatStore.chatingInfo.userB.avatar"
+                                    <img :src="chatStore.chatingInfo.userA.id == message.id ? (chatStore.chatingInfo.userA.avatar.length > 30 ? chatStore.chatingInfo.userA.avatar : defaultAvatar) : (chatStore.chatingInfo.userB.avatar.length > 30 ? chatStore.chatingInfo.userB.avatar : defaultAvatar)"
                                         alt="">
                                 </div>
                                 <div
@@ -116,22 +116,22 @@ function chatWith(row) {
     messages.value = row.messageContent;
 }
 
-function deleteChart(chat){
+function deleteChart(chat) {
     const toClientName = userStore.user._id == chat.userA.id ? chat.userB.name : chat.userA.name;
-    ElMessageBox.confirm(`确认删除与${toClientName}的会话吗`,'确认删除',{
-        confirmButtonText:'确认',
-        cancelButtonText:'取消',
-        type:'warning'
-    }).then(async ()=>{
+    ElMessageBox.confirm(`确认删除与${toClientName}的会话吗`, '确认删除', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(async () => {
         const result = await api.chat.reqDeleteChat(chat._id);
-        if(result.state == 200){
+        if (result.state == 200) {
             ElMessage.success('删除成功');
             chatStore.getChatList();
             isChat.value = false;
-        }else{
+        } else {
             ElMessage.error('删除失败');
         }
-    }).catch(()=>{
+    }).catch(() => {
         ElMessage.info('取消删除');
     })
 }
@@ -142,7 +142,7 @@ function sendMessage() {
         id: userStore.user._id,
         text: inputMessage.value,
         time: Date.now(),
-        isShowTime:false,
+        isShowTime: false,
     };
     inputMessage.value = '';
     ws.send(`${toClientId}|#${JSON.stringify(message)}`);
@@ -187,6 +187,7 @@ function sendMessage() {
                 cursor: pointer;
                 margin-bottom: 5px;
                 transition: 1s all linear;
+                position: relative;
 
                 img {
                     padding: 5px;
@@ -199,12 +200,16 @@ function sendMessage() {
                     color: whitesmoke;
                     font-weight: 500;
                 }
-                .delete-icon{
+
+                .delete-icon {
                     cursor: pointer;
                     color: white;
-                    margin-left: 40%;
+                    position: absolute;
+                    right: 0;
+                    margin-right: 10%;
                 }
-                .delete-icon:hover{
+
+                .delete-icon:hover {
                     color: black;
                     background-color: white;
                     border-radius: 50%;

@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory, createWebHistory } from "vue-router
 import routes from "./routes";
 import { useUser } from "@/store/user"
 import { createPinia } from "pinia"
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css' // progress bar style
 
 // 路由
 const router = createRouter({
@@ -10,12 +12,14 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+    NProgress.start();
     const user = useUser();
     const token = localStorage.getItem('token')
     const userName = user.user.name
     if (token) {
         if (to.path === '/login') {
             next('/home')
+            NProgress.done();
         } else {
             try {
                 user.getUserInfo()
@@ -29,6 +33,7 @@ router.beforeEach((to, from, next) => {
                 } else {
                     next('/login')
                 }
+                NProgress.done();
                 localStorage.removeItem('token')
                 alert(error.message)
             }
@@ -42,5 +47,8 @@ router.beforeEach((to, from, next) => {
     }
 })
 
+router.afterEach(()=>{
+    NProgress.done();
+})
 // 导出
 export default router

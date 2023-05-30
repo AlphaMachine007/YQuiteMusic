@@ -2,6 +2,7 @@ import axios from 'axios'
 import { removeToken } from './token';
 import router from '@/routes';
 
+
 // 统一判断是否携带token
 function needToken(config) {
     if (config.url.indexOf('mainContent') == -1 && config.url.indexOf('search') == -1 && config.url.indexOf('playMusic') == -1) {

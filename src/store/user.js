@@ -13,8 +13,8 @@ export const useUser = defineStore('user', {
             },
             token: getToken(),
             status: [],
-            fansList:[],
-            focusList:[]
+            fansList: [],
+            focusList: []
         }
     },
     // 相当于计算属性
@@ -46,9 +46,13 @@ export const useUser = defineStore('user', {
             return api.user.reqUserRegist({ account, password })
         },
         userLogout() {
-            this.user = {}
-            this.token = ''
-            removeToken()
+            this.user = {};
+            this.token = '';
+            removeToken();
+            localStorage.removeItem('YQ_USER');
+            localStorage.removeItem('SEARCHED_USER');
+            localStorage.removeItem('cookie');
+            localStorage.setItem('YQ_CLOUD_STATUS',false);
         },
         handleToken() {
             this.token = getToken()
@@ -61,7 +65,7 @@ export const useUser = defineStore('user', {
         },
         // 修改登录用户信息
         async updateUserInfo() {
-            const {avatar,myFavorite,...sendUser} = this.user;
+            const { avatar, myFavorite, ...sendUser } = this.user;
             const result = await api.user.reqUpdateUserInfo(sendUser);
             if (result.state === 200) {
                 this.user = result.data.userInfo;
@@ -72,41 +76,49 @@ export const useUser = defineStore('user', {
             return result
         },
         // 修改用户信息
-        async updateUser(user){
-            const {avatar,myFavorite,...sendUser} = user;
+        async updateUser(user) {
+            const { avatar, myFavorite, ...sendUser } = user;
             const result = await api.user.reqUpdateUserInfo(sendUser);
         },
         // 上传头像
         async updateAvatar(avatar) {
             const result = await api.user.reqUpdateAvatar(avatar);
             if (result.state === 200) {
-                this.user.avatar = result.data.dataURL
+                this.user.avatar = result.data.dataURL;
+                const { myFavorite, ...saveUser } = this.user;
+                localStorage.setItem('YQ_USER', JSON.stringify(saveUser));
             }
             return result
         },
-        async getAvatar(){
-            const result = await api.user.reqGetAvatar()
-            if(result.state === 200){
-                this.user.avatar = result.data.dataURL
+        async getAvatar() {
+            if (JSON.parse(localStorage.getItem('YQ_USER'))) {
+                this.user.avatar = JSON.parse(localStorage.getItem('YQ_USER')).avatar;
+            } else {
+                const result = await api.user.reqGetAvatar()
+                if (result.state === 200) {
+                    this.user.avatar = result.data.dataURL;
+                    const { myFavorite, ...saveUser } = this.user;
+                    localStorage.setItem('YQ_USER', JSON.stringify(saveUser));
+                }
             }
         },
         // 获取我的最爱
-        async getMyFavorite(){
+        async getMyFavorite() {
             const result = await api.user.reqMyFavorite()
-            if(result.state === 200){
+            if (result.state === 200) {
                 this.user.myFavorite = result.data.myFavorite
             }
         },
         // 获取关注列表
-        async getFocusList(){
+        async getFocusList() {
             const result = await api.user.reqGetFocusList();
-            if(result.state === 200){
+            if (result.state === 200) {
                 result.data.focusList.forEach(element => {
-                    if(element.avatar){
-                        getavatarUrl(element.avatar,url=>{
+                    if (element.avatar) {
+                        getavatarUrl(element.avatar, url => {
                             element.avatar = url;
                         })
-                    }else{
+                    } else {
                         element.avatar = '/src/assets/avatar.jpg';
                     }
                 });
@@ -114,20 +126,20 @@ export const useUser = defineStore('user', {
             }
         },
         // 获取粉丝列表
-        async getFansList(){
+        async getFansList() {
             const result = await api.user.reqGetFansList();
-            if(result.state === 200){
+            if (result.state === 200) {
                 this.fansList = result.data.fansList;
             }
         },
         // 关注用户
-        async focusUser(userInfo){
-            const result = await api.user.reqFocusUser({userInfo,focusUserInfo:this.user});
+        async focusUser(userInfo) {
+            const result = await api.user.reqFocusUser({ userInfo, focusUserInfo: this.user });
             return result;
         },
         // 取消关注
-        async unFocusUser(userInfo){
-            const result = await api.user.reqUnFocusUser({userInfo,unFocusUserInfo:this.user});
+        async unFocusUser(userInfo) {
+            const result = await api.user.reqUnFocusUser({ userInfo, unFocusUserInfo: this.user });
             return result;
         }
     },

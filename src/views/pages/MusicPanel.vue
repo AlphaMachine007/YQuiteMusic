@@ -3,16 +3,17 @@
         <!-- banner -->
         <div class="banner-box">
             <div class="banner-top">
-                <img :src="playListStore.playingMusic.album ? playListStore.playingMusic.album.picUrl : '/src/assets/avatar.jpg'"
+                <img :src="playListStore.playingMusic.album ? playListStore.playingMusic.album.picUrl : defaultAvatar"
                     alt="">
             </div>
             <div class="banner-bottom">
                 <div class="banner-icon">
                     <img v-show="isCollectMusic" src="@/assets/musicPanel/collect.svg" alt="collect"
                         @click="removeFavorite" />
-                    <img v-show="!isCollectMusic" src="@/assets/musicPanel/collect-filled.svg" alt="collect" @click="addFavorite" />
+                    <img v-show="!isCollectMusic" src="@/assets/musicPanel/collect-filled.svg" alt="collect"
+                        @click="addFavorite" />
                     <img src="@/assets/musicPanel/download.svg" alt="download" @click="downloadMusic" />
-                    <img src="@/assets/musicPanel/分享.svg" alt="" class="sendToOther" @click="shareTheMusic" />
+                    <img src="@/assets/musicPanel/share.svg" alt="" class="sendToOther" @click="shareTheMusic" />
                 </div>
             </div>
         </div>
@@ -50,7 +51,7 @@
 import { usePlayList } from '@/store/playList'
 import { useUser } from '@/store/user';
 import api from '@/api';
-
+import defaultAvatar from '@/assets/avatar.jpg';
 import { onMounted, onUnmounted } from 'vue';
 import transformTime from '@/utils/transformTime';
 const playListStore = usePlayList();
@@ -123,24 +124,49 @@ async function downloadMusic() {
 }
 // 分享音乐
 function shareTheMusic() {
-    const baseUrl = window.location.origin+window.location.pathname;
+    const baseUrl = window.location.origin + `#/home/musicpanel`;
     const songId = playListStore.playingMusic.id;
     const shareUrl = `${baseUrl}?songId=${songId}`;
-    navigator.clipboard.writeText(shareUrl);
+    copyToClipboard(shareUrl);
     ElMessage.success('已将分享链接复制到剪切板中~');
 }
-async function getSongByUrl(){
-    if(window.location.href.split('=')){
+function copyToClipboard(textToCopy) {
+    // navigator clipboard 需要https等安全上下文
+    if (navigator.clipboard && window.isSecureContext) {
+        // navigator clipboard 向剪贴板写文本
+        return navigator.clipboard.writeText(textToCopy);
+    } else {
+        // 创建text area
+        let textArea = document.createElement("textarea");
+        textArea.value = textToCopy;
+        // 使text area不在viewport，同时设置不可见
+        textArea.style.position = "absolute";
+        textArea.style.opacity = 0;
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        return new Promise((res, rej) => {
+            // 执行复制命令并移除文本框
+            document.execCommand('copy') ? res() : rej();
+            textArea.remove();
+        });
+    }
+}
+
+async function getSongByUrl() {
+    if (window.location.href.split('=')) {
         const songId = window.location.href.split('=')[1];
-        const result = await api.music.reqSongDetailById({songId});
-        if(result.code == 200){
+        const result = await api.music.reqSongDetailById({ songId });
+        if (result.code == 200) {
             const music = {
-                album:result.songs[0].al,
-                id:result.songs[0].id,
-                isShowOpe:false,
-                name:result.songs[0].name,
-                singer:result.songs[0].ar,
-                time:transformTime(result.songs[0].dt),
+                album: result.songs[0].al,
+                id: result.songs[0].id,
+                isShowOpe: false,
+                name: result.songs[0].name,
+                singer: result.songs[0].ar,
+                time: transformTime(result.songs[0].dt),
             }
             playListStore.playingMusic = music;
         }
@@ -240,6 +266,10 @@ watch(() => userStore.user.myFavorite, () => {
                     margin-bottom: 25px;
                     margin-right: 10px;
                     cursor: pointer;
+                }
+
+                .sendToOther {
+                    width: 45px;
                 }
             }
         }
